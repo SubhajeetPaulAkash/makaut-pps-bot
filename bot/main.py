@@ -1,0 +1,21 @@
+import os
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("BOT_TOKEN")
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("🚀 PPS Bot is Live!")
+
+def main():
+    if not TOKEN:
+        raise ValueError("BOT_TOKEN is not found. Check .env file")
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start",start))
+    print("Bot is running...")
+    app.run_polling()
+
+if __name__== "__main__":
+    main()
