@@ -2,6 +2,7 @@ import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes, CallbackQueryHandler
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 TOKEN = os.getenv("BOT_TOKEN")
@@ -22,18 +23,54 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=reply_markup,
     )
 
+# loading content
+def load_content():
+    with open ("data/content.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+    
+content = load_content()
 
 # Button Handaler
 async def handle_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
-    await query.answer  # prevent loading issues
+    await query.answer()  # prevent loading issues
 
-    data = query.data
+    action = query.data
 
-    if data == "practice":
-        await query.edit_message_text("🚀 Starting Day 1 practice...")
-    elif data == "continue":
+    if action == "practice":
+        day = "day1"
+
+        if day not in content:
+            await query.edit_message_text("❌ Content not available...")
+            return
+        
+        data = content[day]
+        message = (
+            f"🔥 {data.get('hook', '')}\n\n"
+            f"🧠 Topic:\n {data.get('title', 'Day1')}\n\n"
+            f"📌 Problem:\n{data.get('problem', '')}\n\n"
+            f"⏳ Try for 5 mins before checking hints..."
+        )
+
+        keyboard = [
+            [InlineKeyboardButton("Hint 1", callback_data="hint_0")],
+            [InlineKeyboardButton("Hint 2", callback_data="hint_1")],
+            [InlineKeyboardButton("Show Code", callback_data="show_code")],
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        await query.edit_message_text(message,reply_markup=reply_markup)
+    
+    elif action == "continue":
         await query.edit_message_text("📅 Resuming your progress...")
+    
+    elif action == "hint_0":
+        await query.reply_text("💡 Hint 1")
+
+    elif action == "hint_1":
+        await query.reply_text("💡 Hint 2")
+
+    elif action == "show_code":
+        await query.reply_text("🧑‍💻 Code")
 
 def main():
     if not TOKEN:

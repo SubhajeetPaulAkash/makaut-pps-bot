@@ -1,3 +1,5 @@
 __pychace__/
 .env
 venv/
+
+data/content.json
