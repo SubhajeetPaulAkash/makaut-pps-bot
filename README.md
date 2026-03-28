@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🚀 MAKAUT PPS Practice Bot
 
 A Telegram bot designed to help 2nd semester MAKAUT students learn **C programming (PPS)** through a structured, day-wise practice system.
@@ -62,7 +61,6 @@ Each problem includes:
 
 ---
 
-=======
 # 🚀 MAKAUT PPS Practice Bot
 
 A Telegram bot designed to help 2nd semester MAKAUT students learn **C programming (PPS)** through a structured, day-wise practice system.
@@ -126,4 +124,3 @@ Each problem includes:
 
 ---
 
->>>>>>> d82a72eedd1a67311fe7f11f99bee42ffa5ae4c9
